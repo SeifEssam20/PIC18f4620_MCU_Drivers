@@ -7,7 +7,13 @@
 # 1 "C:/Program Files/Microchip/MPLABX/v6.10/packs/Microchip/PIC18Fxxxx_DFP/1.4.151/xc8\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
 # 1 "ECU_Layer/LED/ecu_led.c" 2
-# 10 "ECU_Layer/LED/ecu_led.c"
+
+
+
+
+
+
+
 # 1 "ECU_Layer/LED/ecu_led.h" 1
 # 14 "ECU_Layer/LED/ecu_led.h"
 # 1 "ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/hal_gpio.h" 1
@@ -4764,5 +4770,106 @@ Std_ReturnType gpio_port_wrt_logic(port_index_t port, uint8 logic);
 Std_ReturnType gpio_port_rd_logic(port_index_t port, uint8 *logic);
 Std_ReturnType gpio_port_tgl_logic(port_index_t port);
 # 14 "ECU_Layer/LED/ecu_led.h" 2
-# 10 "ECU_Layer/LED/ecu_led.c" 2
 
+# 1 "ECU_Layer/LED/ecu_led_cfg.h" 1
+# 15 "ECU_Layer/LED/ecu_led.h" 2
+# 25 "ECU_Layer/LED/ecu_led.h"
+typedef enum{
+    LED_OFF,
+    LED_ON
+}led_status;
+
+typedef struct{
+    uint8 port_name :3;
+    uint8 pin :3;
+    uint8 led_status :1;
+    uint8 reserved_bit :1;
+}led_t;
+
+
+
+Std_ReturnType led_init(const led_t * led );
+Std_ReturnType led_on(const led_t * led );
+Std_ReturnType led_off(const led_t * led );
+Std_ReturnType led_tgl(const led_t * led );
+# 8 "ECU_Layer/LED/ecu_led.c" 2
+
+
+
+
+
+
+
+
+Std_ReturnType led_init(const led_t * led ){
+    Std_ReturnType retVal = (Std_ReturnType)0x01;;
+    if(((void*)0) == led ){
+        retVal = (Std_ReturnType)0x00;;
+    }
+    else{
+        pin_config_t pin_obj = {
+           .port = led->port_name,
+           .pin = led->pin,
+           .direction = OUTPUT,
+           .logic = led->led_status
+        };
+        retVal = gpio_pin_init(&pin_obj);
+    }
+    return retVal;
+}
+# 40 "ECU_Layer/LED/ecu_led.c"
+Std_ReturnType led_on(const led_t * led ){
+Std_ReturnType retVal = (Std_ReturnType)0x01;;
+    if(((void*)0) == led ){
+        retVal = (Std_ReturnType)0x00;;
+    }
+    else{
+        pin_config_t pin_obj = {
+           .port = led->port_name,
+           .pin = led->pin,
+           .direction = OUTPUT,
+           .logic = led->led_status
+        };
+        retVal = gpio_pin_wrt_logic(&pin_obj,HIGH);
+    }
+    return retVal;
+
+}
+# 65 "ECU_Layer/LED/ecu_led.c"
+Std_ReturnType led_off(const led_t * led ){
+Std_ReturnType retVal = (Std_ReturnType)0x01;;
+    if(((void*)0) == led){
+        retVal = (Std_ReturnType)0x00;;
+    }
+    else{
+        pin_config_t pin_obj = {
+           .port = led->port_name,
+           .pin = led->pin,
+           .direction = OUTPUT,
+           .logic = led->led_status
+        };
+        retVal = gpio_pin_wrt_logic(&pin_obj,LOW);
+    }
+    return retVal;
+
+}
+# 90 "ECU_Layer/LED/ecu_led.c"
+Std_ReturnType led_tgl(const led_t * led ){
+Std_ReturnType retVal = (Std_ReturnType)0x01;;
+    if(((void*)0) == led){
+        retVal = (Std_ReturnType)0x00;;
+    }
+    else{
+        pin_config_t pin_obj = {
+           .port = led->port_name,
+           .pin = led->pin,
+           .direction = OUTPUT,
+           .logic = led->led_status
+        };
+        retVal = gpio_pin_tgl_logic(&pin_obj);
+    }
+    return retVal;
+
+
+
+}

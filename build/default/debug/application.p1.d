@@ -7,4 +7,15 @@ ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../mcal_std_types.h  \
 ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../compiler.h  \
 ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../std_libs.h  \
 ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../device_cfg.h  \
-ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/hal_gpio_cfg.h 
+ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/hal_gpio_cfg.h  \
+ECU_Layer/LED/ecu_led_cfg.h  \
+ECU_Layer/BUTTON/ecu_button.h  \
+ECU_Layer/BUTTON/ecu_button_cfg.h  \
+ECU_Layer/Relay/ecu_relay.h  \
+ECU_Layer/Relay/ecu_relay_cfg.h  \
+ECU_Layer/DC_MOTOR/ecu_DC_motor.h  \
+ECU_Layer/DC_MOTOR/ecu_DC_motor_cfg.h  \
+ECU_Layer/7_SEGMENT/ecu_7_seg.h  \
+ECU_Layer/7_SEGMENT/ecu_7_seg_cfg.h  \
+ECU_Layer/KEYPAD/ecu_keypad.h  \
+ECU_Layer/KEYPAD/ecu_keypad_cfg.h 

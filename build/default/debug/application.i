@@ -4773,26 +4773,184 @@ Std_ReturnType gpio_port_wrt_logic(port_index_t port, uint8 logic);
 Std_ReturnType gpio_port_rd_logic(port_index_t port, uint8 *logic);
 Std_ReturnType gpio_port_tgl_logic(port_index_t port);
 # 14 "./ECU_Layer/LED/ecu_led.h" 2
+
+# 1 "./ECU_Layer/LED/ecu_led_cfg.h" 1
+# 15 "./ECU_Layer/LED/ecu_led.h" 2
+# 25 "./ECU_Layer/LED/ecu_led.h"
+typedef enum{
+    LED_OFF,
+    LED_ON
+}led_status;
+
+typedef struct{
+    uint8 port_name :3;
+    uint8 pin :3;
+    uint8 led_status :1;
+    uint8 reserved_bit :1;
+}led_t;
+
+
+
+Std_ReturnType led_init(const led_t * led );
+Std_ReturnType led_on(const led_t * led );
+Std_ReturnType led_off(const led_t * led );
+Std_ReturnType led_tgl(const led_t * led );
 # 13 "./application.h" 2
+
+# 1 "./ECU_Layer/BUTTON/ecu_button.h" 1
+# 14 "./ECU_Layer/BUTTON/ecu_button.h"
+# 1 "./ECU_Layer/BUTTON/ecu_button_cfg.h" 1
+# 14 "./ECU_Layer/BUTTON/ecu_button.h" 2
+
+
+
+
+
+
+
+typedef enum {
+    BUTTON_RELEASED,
+    BUTTON_PRESSED
+}button_state_t;
+
+typedef enum{
+    BUTTON_ACTIVE_LOW,
+    BUTTON_ACTIVE_HIGH
+}button_active_t;
+
+typedef struct{
+    pin_config_t button_obj;
+    button_state_t button_state;
+    button_active_t button_connection;
+}button_t;
+
+
+Std_ReturnType button_init(const button_t * btn);
+Std_ReturnType button_rd_state(const button_t * btn, button_state_t * btn_state);
+# 14 "./application.h" 2
+
+# 1 "./ECU_Layer/Relay/ecu_relay.h" 1
+# 11 "./ECU_Layer/Relay/ecu_relay.h"
+# 1 "./ECU_Layer/Relay/ecu_relay_cfg.h" 1
+# 11 "./ECU_Layer/Relay/ecu_relay.h" 2
+# 22 "./ECU_Layer/Relay/ecu_relay.h"
+typedef struct{
+    uint8 relay_port :3;
+    uint8 relay_pin :3;
+    uint8 relay_status :1;
+    uint8 reserved_bit :1;
+
+}relay_t;
+
+
+
+Std_ReturnType relay_init(const relay_t * relay_obj);
+Std_ReturnType relay_on(const relay_t * relay_obj);
+Std_ReturnType relay_off(const relay_t * relay_obj);
+# 15 "./application.h" 2
+
+# 1 "./ECU_Layer/DC_MOTOR/ecu_DC_motor.h" 1
+# 12 "./ECU_Layer/DC_MOTOR/ecu_DC_motor.h"
+# 1 "./ECU_Layer/DC_MOTOR/ecu_DC_motor_cfg.h" 1
+# 12 "./ECU_Layer/DC_MOTOR/ecu_DC_motor.h" 2
+# 26 "./ECU_Layer/DC_MOTOR/ecu_DC_motor.h"
+typedef struct{
+    pin_config_t dc_motor[2];
+}dc_motor_t;
+
+
+Std_ReturnType dc_motor_init(const dc_motor_t * motor_obj);
+Std_ReturnType dc_motor_move_cw(const dc_motor_t * motor_obj);
+Std_ReturnType dc_motor_move_ccw(const dc_motor_t * motor_obj);
+Std_ReturnType dc_motor_stop(const dc_motor_t * motor_obj);
+# 16 "./application.h" 2
+
+
+# 1 "./ECU_Layer/7_SEGMENT/ecu_7_seg.h" 1
+# 13 "./ECU_Layer/7_SEGMENT/ecu_7_seg.h"
+# 1 "./ECU_Layer/7_SEGMENT/ecu_7_seg_cfg.h" 1
+# 13 "./ECU_Layer/7_SEGMENT/ecu_7_seg.h" 2
+# 27 "./ECU_Layer/7_SEGMENT/ecu_7_seg.h"
+typedef enum{
+    SEGMENT_COMMON_ANODE,
+    SEGMENT_COMMON_CATHODE
+}seg_type_t;
+
+typedef struct{
+    pin_config_t seg_pins[4];
+    seg_type_t seg_type;
+
+}seg_t;
+
+
+Std_ReturnType se7en_seg_init(const seg_t * seg_obj);
+Std_ReturnType se7en_seg_wrt_num(const seg_t * seg_obj, uint8 num);
+# 18 "./application.h" 2
+
+# 1 "./ECU_Layer/KEYPAD/ecu_keypad.h" 1
+# 11 "./ECU_Layer/KEYPAD/ecu_keypad.h"
+# 1 "./ECU_Layer/KEYPAD/ecu_keypad_cfg.h" 1
+# 11 "./ECU_Layer/KEYPAD/ecu_keypad.h" 2
+# 23 "./ECU_Layer/KEYPAD/ecu_keypad.h"
+typedef struct{
+    pin_config_t keypad_row_pins[4];
+    pin_config_t keypad_column_pins[4];
+}keypad_t;
+
+
+Std_ReturnType keypad_init(const keypad_t * keypad_obj);
+Std_ReturnType keypad_get_val(const keypad_t * keypad_obj, uint8 * val);
+# 19 "./application.h" 2
 # 9 "application.c" 2
 
+Std_ReturnType ret = (Std_ReturnType)0x00;;
+uint8 btnVal = 0;
 
-pin_config_t test = {
-    .port = PORTA_index,
-    .pin = PIN3,
-    .direction = OUTPUT,
-    .logic = HIGH
+keypad_t keypad = {
+    .keypad_row_pins[0].port = PORTC_index,
+    .keypad_row_pins[0].pin = PIN0,
+    .keypad_row_pins[0].direction = OUTPUT,
+    .keypad_row_pins[0].logic = LOW,
+    .keypad_row_pins[1].port = PORTC_index,
+    .keypad_row_pins[1].pin = PIN1,
+    .keypad_row_pins[1].direction = OUTPUT,
+    .keypad_row_pins[1].logic = LOW,
+    .keypad_row_pins[2].port = PORTC_index,
+    .keypad_row_pins[2].pin = PIN2,
+    .keypad_row_pins[2].direction = OUTPUT,
+    .keypad_row_pins[2].logic = LOW,
+    .keypad_row_pins[3].port = PORTC_index,
+    .keypad_row_pins[3].pin = PIN3,
+    .keypad_row_pins[3].direction = OUTPUT,
+    .keypad_row_pins[3].logic = LOW,
+    .keypad_column_pins[0].port = PORTC_index,
+    .keypad_column_pins[0].pin = PIN4,
+    .keypad_column_pins[0].direction = INPUT,
+    .keypad_column_pins[0].logic = LOW,
+    .keypad_column_pins[1].port = PORTC_index,
+    .keypad_column_pins[1].pin = PIN5,
+    .keypad_column_pins[1].direction = INPUT,
+    .keypad_column_pins[1].logic = LOW,
+    .keypad_column_pins[2].port = PORTC_index,
+    .keypad_column_pins[2].pin = PIN6,
+    .keypad_column_pins[2].direction = INPUT,
+    .keypad_column_pins[2].logic = LOW,
+    .keypad_column_pins[3].port = PORTC_index,
+    .keypad_column_pins[3].pin = PIN7,
+    .keypad_column_pins[3].direction = INPUT,
+    .keypad_column_pins[3].logic = LOW
 };
 
-int main()
-{
-    gpio_pin_direction_init(&test);
-    while(1){
-        gpio_pin_wrt_logic(&test,HIGH);
-        _delay(2000);
-        gpio_pin_wrt_logic(&test,LOW);
-        _delay(2000);
-    }
 
+void app_init(void);
+int main() {
+    app_init();
+    while(1){
+        ret = keypad_get_val(&(keypad),&(btnVal));
+    }
     return (0);
+}
+
+void app_init(void){
+   keypad_init(&keypad);
 }

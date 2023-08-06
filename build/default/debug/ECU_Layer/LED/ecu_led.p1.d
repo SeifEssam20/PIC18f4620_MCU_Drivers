@@ -6,4 +6,5 @@ ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../mcal_std_types.h  \
 ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../compiler.h  \
 ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../std_libs.h  \
 ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/../device_cfg.h  \
-ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/hal_gpio_cfg.h 
+ECU_Layer/LED/../LED/../../MCAL_Layer/GPIO/hal_gpio_cfg.h  \
+ECU_Layer/LED/ecu_led_cfg.h 
